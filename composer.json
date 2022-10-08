@@ -3,6 +3,12 @@
     "description": "Utilities for generating PHP code",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+        "code",
+        "codegen",
+        "unicode",
+        "utf-8"
+    ],
     "authors": [
         {
             "name": "Matt Kynaston",

@@ -55,12 +55,12 @@ no restrictions on the characters present.
 ### How?
 
 `AbstractNormalizer` uses `ext-intl`'s [Transliterator] to perform the transliteration. Where a character has no 
-equivalent in ASCII (the `€` symbol is a good example), it uses the Unicode name of the character to spell it out (to 
-"Euro"). For ASCII characters that are not valid in a PHP label, it provides it's own spell outs: for instance, a 
-backtick "`" becomes "Backtick".
+equivalent in ASCII (the "€" symbol is a good example), it uses the [Unicode name] of the character to spell it out (to 
+`Euro`). For ASCII characters that are not valid in a PHP label, it provides it's own spell outs: for instance, a 
+backtick "`" becomes `Backtick`.
 
-Initial digits are also spelt out - "123 foo" becomes "OneTwoThreeFoo" - and finally reserved words are suffixed with a 
-user-supplied string so they don't mess things up: "class" can become "ClassController".
+Initial digits are also spelt out - "123 foo" becomes `OneTwoThreeFoo` - and finally reserved words are suffixed with a 
+user-supplied string so they don't mess things up: "class" can become `ClassController`.
 
 The results may not be pretty. For instance, if your input contains ` ͖`  - put your glasses on! - the class name will 
 contain `CombiningRightArrowheadAndUpArrowheadBelow`. But it _is_ valid PHP, and stands a good chance of being as unique 
@@ -70,3 +70,4 @@ as the original.
 [transliterating]: https://unicode-org.github.io/icu/userguide/transforms/general/#script-transliteration
 [tests]: ./test/AbstractNormalizerTest.php
 [Transliterator]: https://www.php.net/manual/en/class.transliterator.php
+[Unicode name]: https://unicode.org/charts/charindex.html
