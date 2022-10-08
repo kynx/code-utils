@@ -3,10 +3,10 @@
 Utilities for generating PHP code.
 
 
-## Normalizer
+## Normalizers
 
-Generates PHP labels (class names, namespaces, property names, etc) from valid UTF-8 strings, transliterating them to
-ASCII and spelling out any invalid characters.
+The normalizers generate PHP labels (class names, namespaces, property names, etc) from valid UTF-8 strings, 
+[transliterating] them to ASCII and spelling out any invalid characters.
 
 ### Usage:
 
@@ -14,10 +14,10 @@ The following code (forgive the Japanese - a certain translation tool tells me i
 ```php
 <?php
 
-use Kynx\CodeUtls\Normalizer;
+use Kynx\CodeUtls\ClassNameNormalizer;
 
-$normalizer = new Normalizer();
-$namespace = $normalizer->normalizeNamespace('ペット \ ショップ');
+$normalizer = new ClassNameNormalizer();
+$namespace = $normalizer->normalize('ペット \ ショップ');
 echo $namespace;
 ```
 
@@ -28,8 +28,12 @@ Petto\Shoppu
 
 and:
 ```php
+<?php
 
-$property = $normalizer->normalizeProperty('2 $ bill');
+use Kynx\CodeUtls\PropertyNameNormalizer;
+
+$normalizer = new PropertyNameNormalizer();
+$property = $normalizer->normalize('2 $ bill');
 echo $property;
 ```
 
@@ -48,10 +52,10 @@ no restrictions on the characters present.
 
 ### How?
 
-`Normalizer` uses `ext-intl`'s [Transliterator] to perform the [transliteration]. Where a character has no equivilance 
-in ASCII (the `€` symbol is a good example), it uses the Unicode name of the character to spell it out (to "Euro"). For 
-ASCII characters that are not valid in a PHP label, it provides it's own spell outs: for instance, a backtick "`" 
-becomes "Backtick".
+`AbstractNormalizer` uses `ext-intl`'s [Transliterator] to perform the transliteration. Where a character has no 
+equivalent in ASCII (the `€` symbol is a good example), it uses the Unicode name of the character to spell it out (to 
+"Euro"). For ASCII characters that are not valid in a PHP label, it provides it's own spell outs: for instance, a 
+backtick "`" becomes "Backtick".
 
 Initial digits are also spelt out - "123 foo" becomes "OneTwoThreeFoo", and finally reserved words are suffixed with a 
 user-supplied string so they don't mess things up: "class" can become "ClassController".
@@ -61,6 +65,6 @@ contain `CombiningRightArrowheadAndUpArrowheadBelow`. But it _is_ valid PHP, and
 as the original.  
 
 
-[tests]: ./test/NormalizerTest.php
+[transliterating]: https://unicode-org.github.io/icu/userguide/transforms/general/#script-transliteration
+[tests]: ./test/AbstractNormalizerTest.php
 [Transliterator]: https://www.php.net/manual/en/class.transliterator.php
-[transliteration]: https://unicode-org.github.io/icu/userguide/transforms/general/#script-transliteration

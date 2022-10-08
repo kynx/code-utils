@@ -7,10 +7,8 @@ namespace Kynx\CodeUtils;
 use IntlBreakIterator;
 use IntlChar;
 use IntlCodePointBreakIterator;
-use Kynx\CodeUtils\Exception\NormalizerException;
 use Transliterator;
 
-use function array_filter;
 use function array_map;
 use function array_shift;
 use function assert;
@@ -20,6 +18,7 @@ use function implode;
 use function in_array;
 use function lcfirst;
 use function ord;
+use function preg_match;
 use function preg_replace;
 use function str_ends_with;
 use function str_replace;
@@ -33,15 +32,12 @@ use function ucfirst;
 /**
  * Utility for generating valid PHP labels from UTF-8 strings
  *
- * @see \KynxTest\CodeUtils\NormalizerTest
+ * @internal
+ *
+ * @see \KynxTest\CodeUtils\AbstractNormalizerTest
  */
-final class Normalizer
+abstract class AbstractNormalizer implements NormalizerInterface
 {
-    public const CAMEL_CASE  = 'camelCase';
-    public const PASCAL_CASE = 'PascalCase';
-    public const SNAKE_CASE  = 'snake_case';
-    public const UPPER_SNAKE = 'SNAKE_CASE';
-
     private const VALID_CASES = [
         self::CAMEL_CASE,
         self::PASCAL_CASE,
@@ -53,7 +49,7 @@ final class Normalizer
      * @see https://www.php.net/manual/en/reserved.keywords.php
      * @see https://www.php.net/manual/en/reserved.other-reserved-words.php
      */
-    private const RESERVED = [
+    protected const RESERVED = [
         'abstract',
         'and',
         'array',
@@ -195,7 +191,7 @@ final class Normalizer
         94  => 'Caret',
         96  => 'Backtick',
         123 => 'OpenCurly',
-        124 => 'Vbar',
+        124 => 'Pipe',
         125 => 'CloseCurly',
         126 => 'Tilde',
         127 => 'Delete',
@@ -216,85 +212,28 @@ final class Normalizer
 
     private Transliterator $latinAscii;
     private IntlCodePointBreakIterator $codePoints;
+    private string $case;
+    private string|null $suffix;
     private string $separators;
 
-    public function __construct(string $separators = '-.')
+    public function __construct(string|null $suffix, string $case, string $separators = self::DEFAULT_SEPARATORS)
     {
+        if (! in_array($case, self::VALID_CASES)) {
+            throw NormalizerException::invalidCase($case, self::VALID_CASES);
+        }
+
         $latinAscii = Transliterator::create('NFC; Any-Latin; Latin-ASCII;');
         assert($latinAscii instanceof Transliterator);
 
         $this->latinAscii = $latinAscii;
         $this->codePoints = IntlBreakIterator::createCodePointInstance();
+
+        $this->case       = $case;
+        $this->suffix     = $this->prepareSuffix($suffix, $case);
         $this->separators = str_replace('/', '\\/', $separators);
     }
 
-    /**
-     * Returns class name in format `^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$` from UTF-8 string
-     *
-     * If the resulting class name matches a reserved word, `$suffix` is appended.
-     */
-    public function normalizeClassName(string $className, string $suffix, string $case = self::PASCAL_CASE): string
-    {
-        return $this->normalize($className, $suffix, self::RESERVED, $case);
-    }
-
-    /**
-     * Returns constant name in format `^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$` from UTF-8 string
-     *
-     * If the resulting constant name matches a reserved word, `$suffix` is appended.
-     */
-    public function normalizeConstantName(string $className, string $suffix, string $case = self::UPPER_SNAKE): string
-    {
-        return $this->normalize($className, $suffix, self::RESERVED, $case);
-    }
-
-    /**
-     * Returns namespace from UTF-8 string with all parts normalized as per self::normalizeClassName()
-     *
-     * Leading and trailing namespace separators are removed, as are empty namespaces.
-     */
-    public function normalizeNamespace(string $namespace, string $suffix, string $case = self::PASCAL_CASE): string
-    {
-        $parts = explode('\\', $namespace);
-        foreach ($parts as $i => $part) {
-            $parts[$i] = $this->normalizeClassName($part, $suffix, $case);
-        }
-
-        return implode('\\', array_filter($parts));
-    }
-
-    /**
-     * Returns property name in format `^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$` from UTF-8 string
-     *
-     * Property names do _not_ have `$` prepended.
-     */
-    public function normalizePropertyName(string $propertyName, string $case = self::CAMEL_CASE): string
-    {
-        return $this->normalize($propertyName, '', [], $case);
-    }
-
-    /**
-     * Returns variable name in format `^\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$` from UTF-8 string
-     *
-     * Variable names _do_ have `$` prepended. If the resulting variable name is `$this`, `$suffix` is appended.
-     */
-    public function normalizeVariableName(string $variableName, string $suffix, string $case = self::CAMEL_CASE): string
-    {
-        return '$' . $this->normalize($variableName, $suffix, ['this'], $case);
-    }
-
-    private function normalize(string $string, string $reservedSuffix, array $reservedWords, string $case): string
-    {
-        $ascii       = $this->toAscii($string);
-        $underscored = $this->separatorsToUnderscore($ascii);
-        $speltOut    = $this->spellOutLeadingDigits($this->spellOutAscii($underscored));
-        $cased       = $this->toCase($speltOut, $case);
-        $suffix      = $this->prepareReservedSuffix($reservedSuffix, $case);
-
-        return $this->sanitizeReserved($cased, $suffix, $reservedWords);
-    }
-
-    private function toAscii(string $string): string
+    protected function toAscii(string $string): string
     {
         $transliterated = $this->latinAscii->transliterate($string);
         if ($transliterated === false) {
@@ -313,12 +252,12 @@ final class Normalizer
         return $this->spellOutNonAscii(implode(' ', $words));
     }
 
-    private function separatorsToUnderscore(string $string): string
+    protected function separatorsToUnderscore(string $string): string
     {
         return preg_replace('/[' . $this->separators . '\s]+/', '_', trim($string));
     }
 
-    private function spellOutAscii(string $string): string
+    protected function spellOutAscii(string $string): string
     {
         $chunks = str_split($string);
         $last   = count($chunks) - 1;
@@ -329,55 +268,46 @@ final class Normalizer
             $chunks[$i] = $char;
         }
 
-        return implode('', $chunks);
+        return $this->spellOutLeadingDigits(implode('', $chunks));
     }
 
-    private function spellOutLeadingDigits(string $string): string
+    protected function toCase(string $string): string
     {
-        $chunks = str_split($string);
-        foreach ($chunks as $i => $char) {
-            if ($i > 1 && $char === '_') {
-                $chunks[$i] = '';
-                break;
-            }
+        assert(in_array($this->case, self::VALID_CASES));
 
-            $ord = ord($char);
-            if (! isset(self::DIGIT_SPELLOUT[$ord])) {
-                break;
-            }
-
-            $chunks[$i] = self::DIGIT_SPELLOUT[$ord] . '_';
-        }
-
-        return implode('', $chunks);
-    }
-
-    private function toCase(string $string, string $case): string
-    {
         $parts = explode('_', $string);
-        return match ($case) {
+        return match ($this->case) {
             self::CAMEL_CASE  => $this->toCamelCase($parts),
             self::PASCAL_CASE => $this->toPascalCase($parts),
             self::SNAKE_CASE  => $this->toSnakeCase($parts),
             self::UPPER_SNAKE => $this->toUpperSnake($parts),
-            default           => throw NormalizerException::invalidCase($case, self::VALID_CASES),
         };
     }
 
-    private function prepareReservedSuffix(string $reservedSuffix, string $case): string
+    protected function sanitizeReserved(string $string, array $reserved): string
     {
-        if (! in_array($case, [self::SNAKE_CASE, self::UPPER_SNAKE], true)) {
-            return $reservedSuffix;
-        }
-        return str_starts_with($reservedSuffix, '_') ? $reservedSuffix : '_' . $reservedSuffix;
-    }
+        assert($this->suffix !== null);
 
-    private function sanitizeReserved(string $string, string $suffix, array $reserved): string
-    {
         if (in_array(strtolower($string), $reserved, true)) {
-            return $string . $suffix;
+            return $string . $this->suffix;
         }
         return $string;
+    }
+
+    private function prepareSuffix(string|null $suffix, string $case): string|null
+    {
+        if ($suffix === null) {
+            return $suffix;
+        }
+
+        if ($suffix === '' || ! preg_match('/^[a-zA-Z0-9_\x80-\xff]*$/', $suffix)) {
+            throw NormalizerException::invalidSuffix($suffix);
+        }
+
+        if (! in_array($case, [self::SNAKE_CASE, self::UPPER_SNAKE], true)) {
+            return $suffix;
+        }
+        return str_starts_with($suffix, '_') ? $suffix : '_' . $suffix;
     }
 
     private function spellOutNonAscii(string $string): string
@@ -402,6 +332,26 @@ final class Normalizer
         return implode('', array_map(function (string $part): string {
             return $part === 'SIGN' ? '' : ucfirst(strtolower($part));
         }, explode(" ", $speltOut)));
+    }
+
+    private function spellOutLeadingDigits(string $string): string
+    {
+        $chunks = str_split($string);
+        foreach ($chunks as $i => $char) {
+            if ($i > 1 && $char === '_') {
+                $chunks[$i] = '';
+                break;
+            }
+
+            $ord = ord($char);
+            if (! isset(self::DIGIT_SPELLOUT[$ord])) {
+                break;
+            }
+
+            $chunks[$i] = self::DIGIT_SPELLOUT[$ord] . '_';
+        }
+
+        return implode('', $chunks);
     }
 
     /**
