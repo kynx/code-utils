@@ -1,5 +1,7 @@
 # kynx/code-utils
 
+[![Build Status](https://github.com/kynx/code-utils/workflows/Continuous%20Integration/badge.svg)](https://github.com/kynx/code-utils/actions?query=workflow%3A"Continuous+Integration")
+
 Utilities for generating PHP code.
 
 
@@ -57,7 +59,7 @@ equivalent in ASCII (the `€` symbol is a good example), it uses the Unicode na
 "Euro"). For ASCII characters that are not valid in a PHP label, it provides it's own spell outs: for instance, a 
 backtick "`" becomes "Backtick".
 
-Initial digits are also spelt out - "123 foo" becomes "OneTwoThreeFoo", and finally reserved words are suffixed with a 
+Initial digits are also spelt out - "123 foo" becomes "OneTwoThreeFoo" - and finally reserved words are suffixed with a 
 user-supplied string so they don't mess things up: "class" can become "ClassController".
 
 The results may not be pretty. For instance, if your input contains ` ͖`  - put your glasses on! - the class name will 
