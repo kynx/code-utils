@@ -10,6 +10,10 @@ use Kynx\CodeUtils\NormalizerException;
 use Kynx\CodeUtils\NormalizerInterface;
 use PHPUnit\Framework\TestCase;
 
+use function version_compare;
+
+use const PHP_VERSION;
+
 /**
  * @uses \Kynx\CodeUtils\NormalizerException
  *
@@ -121,6 +125,13 @@ final class AbstractNormalizerTest extends TestCase
 
     public function testPrepareSuffixAllowsNullAndAssertionErrorThrown(): void
     {
+        if (
+            version_compare(PHP_VERSION, '8.2.0-dev') >= 0
+            && version_compare(PHP_VERSION, '8.2.0RC2') < 0
+        ) {
+            self::markTestSkipped('assert() not throwing exception in 8.2.0-RC1');
+        }
+
         try {
             $normalizer = $this->getNormalizer(
                 NormalizerInterface::CAMEL_CASE,
