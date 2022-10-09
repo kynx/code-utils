@@ -23,4 +23,10 @@
             <directory suffix=".php">src</directory>
         </include>
     </coverage>
+    
+    <php>
+        <!-- Seems to be needed by CI's PHP8.2-RC1? Not needed in PHP8.2-dev locally! -->
+        <ini name="assert.exception" value="1" />
+        <ini name="assert.warning" value="0" />
+    </php>
 </phpunit>
