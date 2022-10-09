@@ -22,11 +22,11 @@ final class ConstantNameNormalizer extends AbstractNormalizer
      */
     public function normalize(string $label): string
     {
-        $ascii       = $this->toAscii($label);
-        $underscored = $this->separatorsToUnderscore($ascii);
-        $speltOut    = $this->spellOutAscii($underscored);
-        $cased       = $this->toCase($speltOut);
+        $ascii    = $this->toAscii($label);
+        $spaced   = $this->separatorsToSpace($ascii);
+        $speltOut = $this->spellOutAscii($spaced);
+        $cased    = $this->toCase($speltOut);
 
-        return $this->sanitizeReserved($cased, self::RESERVED);
+        return $this->sanitizeReserved($cased);
     }
 }

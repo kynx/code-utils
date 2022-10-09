@@ -9,10 +9,11 @@ use IntlChar;
 use IntlCodePointBreakIterator;
 use Transliterator;
 
+use function array_filter;
 use function array_map;
 use function array_shift;
+use function array_slice;
 use function assert;
-use function count;
 use function explode;
 use function implode;
 use function in_array;
@@ -27,7 +28,6 @@ use function str_starts_with;
 use function strtolower;
 use function substr;
 use function trim;
-use function ucfirst;
 
 /**
  * Utility for generating valid PHP labels from UTF-8 strings
@@ -132,67 +132,66 @@ abstract class AbstractNormalizer implements NormalizerInterface
     ];
 
     private const ASCII_SPELLOUT = [
-        1   => 'StartOfHeader',
-        2   => 'StartOfText',
-        3   => 'EndOfText',
-        4   => 'EndOfTransmission',
+        1   => 'Start Of Header',
+        2   => 'Start Of Text',
+        3   => 'End Of Text',
+        4   => 'End Of Transmission',
         5   => 'Enquiry',
         6   => 'Acknowledgement',
         7   => 'Bell',
         8   => 'Backspace',
-        9   => 'HorizontalTab',
-        10  => 'LineFeed',
-        11  => 'VerticalTab',
-        12  => 'FormFeed',
-        13  => 'CarriageReturn',
-        14  => 'ShiftOut',
-        15  => 'ShiftIn',
-        16  => 'DataLinkEscape',
-        17  => 'DeviceControlOne',
-        18  => 'DeviceControlTwo',
-        19  => 'DeviceControlThree',
-        20  => 'DeviceControlFour',
-        21  => 'NegativeAcknowledgement',
-        22  => 'SynchronousIdle',
-        23  => 'EndOfTransmissionBlock',
+        9   => 'Horizontal Tab',
+        10  => 'Line Feed',
+        11  => 'Vertical Tab',
+        12  => 'Form Feed',
+        13  => 'Carriage Return',
+        14  => 'Shift Out',
+        15  => 'Shift In',
+        16  => 'Data Link Escape',
+        17  => 'Device Control One',
+        18  => 'Device Control Two',
+        19  => 'Device Control Three',
+        20  => 'Device Control Four',
+        21  => 'Negative Acknowledgement',
+        22  => 'Synchronous Idle',
+        23  => 'End Of Transmission Block',
         24  => 'Cancel',
-        25  => 'EndOfMedium',
+        25  => 'End Of Medium',
         26  => 'Substitute',
         27  => 'Escape',
-        28  => 'FileSeparator',
-        29  => 'GroupSeparator',
-        30  => 'RecordSeparator',
-        31  => 'UnitSeparator',
-        32  => 'Space',
+        28  => 'File Separator',
+        29  => 'Group Separator',
+        30  => 'Record Separator',
+        31  => 'Unit Separator',
         33  => 'Exclamation',
-        34  => 'DoubleQuote',
+        34  => 'Double Quote',
         35  => 'Number',
         36  => 'Dollar',
         37  => 'Percent',
         38  => 'Ampersand',
         39  => 'Quote',
-        40  => 'OpenBracket',
-        41  => 'CloseBracket',
+        40  => 'Open Bracket',
+        41  => 'Close Bracket',
         42  => 'Asterisk',
         43  => 'Plus',
         44  => 'Comma',
-        46  => 'FullStop',
+        46  => 'Full Stop',
         47  => 'Slash',
         58  => 'Colon',
         59  => 'Semicolon',
-        60  => 'LessThan',
+        60  => 'Less Than',
         61  => 'Equals',
-        62  => 'GreaterThan',
-        63  => 'QuestionMark',
+        62  => 'Greater Than',
+        63  => 'Question Mark',
         64  => 'At',
-        91  => 'OpenSquare',
+        91  => 'Open Square',
         92  => 'Backslash',
-        93  => 'CloseSquare',
+        93  => 'Close Square',
         94  => 'Caret',
         96  => 'Backtick',
-        123 => 'OpenCurly',
+        123 => 'Open Curly',
         124 => 'Pipe',
-        125 => 'CloseCurly',
+        125 => 'Close Curly',
         126 => 'Tilde',
         127 => 'Delete',
     ];
@@ -252,30 +251,36 @@ abstract class AbstractNormalizer implements NormalizerInterface
         return $this->spellOutNonAscii(implode(' ', $words));
     }
 
-    protected function separatorsToUnderscore(string $string): string
+    protected function separatorsToSpace(string $string): string
     {
-        return preg_replace('/[' . $this->separators . '\s]+/', '_', trim($string));
+        return preg_replace('/[' . $this->separators . '\s_]+/', ' ', trim($string));
     }
 
     protected function spellOutAscii(string $string): string
     {
-        $chunks = str_split($string);
-        $last   = count($chunks) - 1;
-        foreach (str_split($string) as $i => $char) {
-            if (isset(self::ASCII_SPELLOUT[ord($char)])) {
-                $char = self::ASCII_SPELLOUT[ord($char)] . ($i < $last ? '_' : '');
-            }
-            $chunks[$i] = $char;
-        }
+        $speltOut = [];
+        $current  = '';
 
-        return $this->spellOutLeadingDigits(implode('', $chunks));
+        foreach (str_split($string) as $char) {
+            $ord = ord($char);
+            if (! isset(self::ASCII_SPELLOUT[$ord])) {
+                $current .= $char;
+                continue;
+            }
+
+            $speltOut[] = $current;
+            $speltOut[] = self::ASCII_SPELLOUT[$ord];
+            $current    = '';
+        }
+        $speltOut[] = $current;
+
+        return $this->spellOutLeadingDigits(implode(' ', $speltOut));
     }
 
     protected function toCase(string $string): string
     {
-        assert(in_array($this->case, self::VALID_CASES));
-
-        $parts = explode('_', $string);
+        /** @var list<string> $parts */
+        $parts = array_filter(explode(' ', $string));
         return match ($this->case) {
             self::CAMEL_CASE  => $this->toCamelCase($parts),
             self::PASCAL_CASE => $this->toPascalCase($parts),
@@ -284,11 +289,11 @@ abstract class AbstractNormalizer implements NormalizerInterface
         };
     }
 
-    protected function sanitizeReserved(string $string, array $reserved): string
+    protected function sanitizeReserved(string $string): string
     {
         assert($this->suffix !== null);
 
-        if (in_array(strtolower($string), $reserved, true)) {
+        if (in_array(strtolower($string), self::RESERVED, true)) {
             return $string . $this->suffix;
         }
         return $string;
@@ -297,10 +302,10 @@ abstract class AbstractNormalizer implements NormalizerInterface
     private function prepareSuffix(string|null $suffix, string $case): string|null
     {
         if ($suffix === null) {
-            return $suffix;
+            return null;
         }
 
-        if ($suffix === '' || ! preg_match('/^[a-zA-Z0-9_\x80-\xff]*$/', $suffix)) {
+        if (! preg_match('/^[a-zA-Z0-9_\x80-\xff]+$/', $suffix)) {
             throw NormalizerException::invalidSuffix($suffix);
         }
 
@@ -312,46 +317,53 @@ abstract class AbstractNormalizer implements NormalizerInterface
 
     private function spellOutNonAscii(string $string): string
     {
-        $speltOut = '';
+        $speltOut = [];
+        $current  = '';
 
         $this->codePoints->setText($string);
         /** @var string $char */
         foreach ($this->codePoints->getPartsIterator() as $char) {
-            $ord       = IntlChar::ord($char);
-            $speltOut .= $ord < 256 ? $char : $this->spellOutNonAsciiChar($ord);
-        }
+            $ord = IntlChar::ord($char);
+            if ($ord < 256) {
+                $current .= $char;
+                continue;
+            }
 
-        return $speltOut;
+            $speltOut[] = $current;
+            $speltOut[] = $this->spellOutNonAsciiChar($ord);
+            $current    = '';
+        }
+        $speltOut[] = $current;
+
+        return implode(' ', $speltOut);
     }
 
     private function spellOutNonAsciiChar(int $ord): string
     {
         $speltOut = IntlChar::charName($ord);
 
-        // 'EURO SIGN' -> 'Euro'
-        return implode('', array_map(function (string $part): string {
-            return $part === 'SIGN' ? '' : ucfirst(strtolower($part));
-        }, explode(" ", $speltOut)));
+        // 'EURO SIGN' -> 'euro'
+        return implode(' ', array_map(function (string $part): string {
+            return $part === 'SIGN' ? '' : strtolower($part);
+        }, explode(' ', $speltOut)));
     }
 
     private function spellOutLeadingDigits(string $string): string
     {
-        $chunks = str_split($string);
+        $speltOut = [];
+        $chunks   = str_split($string);
         foreach ($chunks as $i => $char) {
-            if ($i > 1 && $char === '_') {
-                $chunks[$i] = '';
-                break;
-            }
-
             $ord = ord($char);
+
             if (! isset(self::DIGIT_SPELLOUT[$ord])) {
+                $speltOut[] = implode('', array_slice($chunks, $i));
                 break;
             }
 
-            $chunks[$i] = self::DIGIT_SPELLOUT[$ord] . '_';
+            $speltOut[] = self::DIGIT_SPELLOUT[$ord];
         }
 
-        return implode('', $chunks);
+        return implode(' ', $speltOut);
     }
 
     /**
