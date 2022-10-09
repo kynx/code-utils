@@ -35,10 +35,10 @@ final class VariableNameNormalizer extends AbstractNormalizer
      */
     public function normalize(string $label): string
     {
-        $ascii       = $this->toAscii($label);
-        $underscored = $this->separatorsToUnderscore($ascii);
-        $speltOut    = $this->spellOutAscii($underscored);
-        $cased       = $this->toCase($speltOut);
+        $ascii    = $this->toAscii($label);
+        $spaced   = $this->separatorsToSpace($ascii);
+        $speltOut = $this->spellOutAscii($spaced);
+        $cased    = $this->toCase($speltOut);
 
         if (strtolower($cased) === 'this') {
             return $this->thisReplacement;

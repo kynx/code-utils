@@ -21,9 +21,9 @@ final class PropertyNameNormalizer extends AbstractNormalizer
      */
     public function normalize(string $label): string
     {
-        $ascii       = $this->toAscii($label);
-        $underscored = $this->separatorsToUnderscore($ascii);
-        $speltOut    = $this->spellOutAscii($underscored);
+        $ascii    = $this->toAscii($label);
+        $spaced   = $this->separatorsToSpace($ascii);
+        $speltOut = $this->spellOutAscii($spaced);
 
         return $this->toCase($speltOut);
     }
