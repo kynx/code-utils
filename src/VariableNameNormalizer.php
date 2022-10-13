@@ -19,7 +19,7 @@ final class VariableNameNormalizer extends AbstractNormalizer
      */
     public function __construct(
         string $thisReplacement = '$self',
-        string $case = self::CAMEL_CASE,
+        WordCase $case = WordCase::Camel,
         string $separators = self::DEFAULT_SEPARATORS
     ) {
         $this->thisReplacement = str_starts_with($thisReplacement, '$') ? $thisReplacement : '$' . $thisReplacement;

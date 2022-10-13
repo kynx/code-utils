@@ -15,7 +15,7 @@ final class ClassNameNormalizer extends AbstractNormalizer
 {
     public function __construct(
         string $suffix,
-        string $case = self::PASCAL_CASE,
+        WordCase $case = WordCase::Pascal,
         string $separators = self::DEFAULT_SEPARATORS
     ) {
         parent::__construct($suffix, $case, $separators);

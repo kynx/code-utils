@@ -9,7 +9,7 @@ namespace Kynx\CodeUtils;
  */
 final class PropertyNameNormalizer extends AbstractNormalizer
 {
-    public function __construct(string $case = self::CAMEL_CASE, string $separators = self::DEFAULT_SEPARATORS)
+    public function __construct(WordCase $case = WordCase::Camel, string $separators = self::DEFAULT_SEPARATORS)
     {
         parent::__construct(null, $case, $separators);
     }

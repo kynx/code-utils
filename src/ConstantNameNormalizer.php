@@ -11,7 +11,7 @@ final class ConstantNameNormalizer extends AbstractNormalizer
 {
     public function __construct(
         string $suffix,
-        string $case = self::UPPER_SNAKE,
+        WordCase $case = WordCase::UpperSnake,
         string $separators = self::DEFAULT_SEPARATORS
     ) {
         parent::__construct($suffix, $case, $separators);
