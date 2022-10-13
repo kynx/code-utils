@@ -6,7 +6,6 @@ namespace Kynx\CodeUtils;
 
 use RuntimeException;
 
-use function implode;
 use function sprintf;
 
 /**
@@ -28,18 +27,6 @@ final class NormalizerException extends RuntimeException
         return new self(sprintf(
             "Invalid reserved word suffix '%s': suffix can only contain '[a-zA-Z0-9_\\x80-\\xff]*' characters",
             $suffix
-        ));
-    }
-
-    /**
-     * @param list<string> $validCases
-     */
-    public static function invalidCase(string $case, array $validCases): self
-    {
-        return new self(sprintf(
-            "Invalid case '%s': expected one of '%s'",
-            $case,
-            implode("', '", $validCases)
         ));
     }
 }

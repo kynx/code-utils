@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace KynxTest\CodeUtils;
 
-use Kynx\CodeUtils\NormalizerInterface;
 use Kynx\CodeUtils\VariableNameNormalizer;
+use Kynx\CodeUtils\WordCase;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @uses \Kynx\CodeUtils\AbstractNormalizer
+ * @uses \Kynx\CodeUtils\PhpLabel
+ * @uses \Kynx\CodeUtils\WordCase
  *
  * @covers \Kynx\CodeUtils\VariableNameNormalizer
  */
@@ -21,7 +23,7 @@ final class VariableNameNormalizerTest extends TestCase
     public function testNormalizeVariableName(
         string $variableName,
         string $thisReplacement,
-        string $case,
+        WordCase $case,
         string $expected
     ): void {
         $normalizer = new VariableNameNormalizer($thisReplacement, $case);
@@ -32,19 +34,19 @@ final class VariableNameNormalizerTest extends TestCase
     public function variableNameProvider(): array
     {
         return [
-            'unicode_spellout' => ['€', 'me', NormalizerInterface::CAMEL_CASE, '$euro'],
-            'ascii_spellout'   => ['$foo', 'me', NormalizerInterface::CAMEL_CASE, '$dollarFoo'],
-            'reserved'         => ['class', 'me', NormalizerInterface::CAMEL_CASE, '$class'],
-            'this'             => ['this', 'me', NormalizerInterface::CAMEL_CASE, '$me'],
-            '$replacement'     => ['this', '$me', NormalizerInterface::CAMEL_CASE, '$me'],
-            'snake_case'       => ['foo bar', 'me', NormalizerInterface::SNAKE_CASE, '$foo_bar'],
+            'unicode_spellout' => ['€', 'me', WordCase::Camel, '$euro'],
+            'ascii_spellout'   => ['$foo', 'me', WordCase::Camel, '$dollarFoo'],
+            'reserved'         => ['class', 'me', WordCase::Camel, '$class'],
+            'this'             => ['this', 'me', WordCase::Camel, '$me'],
+            '$replacement'     => ['this', '$me', WordCase::Camel, '$me'],
+            'snake_case'       => ['foo bar', 'me', WordCase::LowerSnake, '$foo_bar'],
         ];
     }
 
     public function testNormalizeUsesSeparators(): void
     {
         $expected   = '$fooBarBaz';
-        $normalizer = new VariableNameNormalizer('Reserved', NormalizerInterface::CAMEL_CASE, '|/');
+        $normalizer = new VariableNameNormalizer('Reserved', WordCase::Camel, '|/');
         $actual     = $normalizer->normalize('Foo|Bar/ Baz');
         self::assertSame($expected, $actual);
     }

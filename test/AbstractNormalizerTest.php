@@ -8,6 +8,7 @@ use AssertionError;
 use Kynx\CodeUtils\AbstractNormalizer;
 use Kynx\CodeUtils\NormalizerException;
 use Kynx\CodeUtils\NormalizerInterface;
+use Kynx\CodeUtils\WordCase;
 use PHPUnit\Framework\TestCase;
 
 use function version_compare;
@@ -16,6 +17,8 @@ use const PHP_VERSION;
 
 /**
  * @uses \Kynx\CodeUtils\NormalizerException
+ * @uses \Kynx\CodeUtils\PhpLabel
+ * @uses \Kynx\CodeUtils\WordCase
  *
  * @covers \Kynx\CodeUtils\AbstractNormalizer
  */
@@ -56,7 +59,7 @@ final class AbstractNormalizerTest extends TestCase
     /**
      * @dataProvider caseProvider
      */
-    public function testNormalizeUsesCase(string $case, string $expected): void
+    public function testNormalizeUsesCase(WordCase $case, string $expected): void
     {
         $actual = $this->getNormalizer($case)->normalize('foo bar');
         self::assertSame($expected, $actual);
@@ -65,17 +68,17 @@ final class AbstractNormalizerTest extends TestCase
     public function caseProvider(): array
     {
         return [
-            'camelCase'   => [NormalizerInterface::CAMEL_CASE, 'fooBar'],
-            'PascalCase'  => [NormalizerInterface::PASCAL_CASE, 'FooBar'],
-            'snake_case'  => [NormalizerInterface::SNAKE_CASE, 'foo_bar'],
-            'UPPER_SNAKE' => [NormalizerInterface::UPPER_SNAKE, 'FOO_BAR'],
+            'camelCase'   => [WordCase::Camel, 'fooBar'],
+            'PascalCase'  => [WordCase::Pascal, 'FooBar'],
+            'snake_case'  => [WordCase::LowerSnake, 'foo_bar'],
+            'UPPER_SNAKE' => [WordCase::UpperSnake, 'FOO_BAR'],
         ];
     }
 
     /**
      * @dataProvider spellOutCaseProvider
      */
-    public function testSpellOutCase(string $case, string $label, string $expected): void
+    public function testSpellOutCase(WordCase $case, string $label, string $expected): void
     {
         $actual = $this->getNormalizer($case)->normalize($label);
         self::assertSame($expected, $actual);
@@ -84,43 +87,35 @@ final class AbstractNormalizerTest extends TestCase
     public function spellOutCaseProvider(): array
     {
         return [
-            'nonascii-before-camelCase'   => [NormalizerInterface::CAMEL_CASE, '😫foo', 'tiredFaceFoo'],
-            'nonascii-before-PascalCase'  => [NormalizerInterface::PASCAL_CASE, '😫foo', 'TiredFaceFoo'],
-            'nonascii-before-snake_case'  => [NormalizerInterface::SNAKE_CASE, '😫foo', 'tired_face_foo'],
-            'nonascii-before-UPPER_SNAKE' => [NormalizerInterface::UPPER_SNAKE, '😫foo', 'TIRED_FACE_FOO'],
-            'nonascii-after-camelCase'    => [NormalizerInterface::CAMEL_CASE, 'foo😫', 'fooTiredFace'],
-            'nonascii-after-PascalCase'   => [NormalizerInterface::PASCAL_CASE, 'foo😫', 'FooTiredFace'],
-            'nonascii-after-snake_case'   => [NormalizerInterface::SNAKE_CASE, 'foo😫', 'foo_tired_face'],
-            'nonascii-after-UPPER_SNAKE'  => [NormalizerInterface::UPPER_SNAKE, 'foo😫', 'FOO_TIRED_FACE'],
-            'ascii-before-camelCase'      => [NormalizerInterface::CAMEL_CASE, '$foo', 'dollarFoo'],
-            'ascii-before-PascalCase'     => [NormalizerInterface::PASCAL_CASE, '$foo', 'DollarFoo'],
-            'ascii-before-snake_case'     => [NormalizerInterface::SNAKE_CASE, '$foo', 'dollar_foo'],
-            'ascii-before-UPPER_SNAKE'    => [NormalizerInterface::UPPER_SNAKE, '$foo', 'DOLLAR_FOO'],
-            'ascii-after-camelCase'       => [NormalizerInterface::CAMEL_CASE, 'foo$', 'fooDollar'],
-            'ascii-after-PascalCase'      => [NormalizerInterface::PASCAL_CASE, 'foo$', 'FooDollar'],
-            'ascii-after-snake_case'      => [NormalizerInterface::SNAKE_CASE, 'foo$', 'foo_dollar'],
-            'ascii-after-UPPER_SNAKE'     => [NormalizerInterface::UPPER_SNAKE, 'foo$', 'FOO_DOLLAR'],
-            'digit-before-camelCase'      => [NormalizerInterface::CAMEL_CASE, '1foo', 'oneFoo'],
-            'digit-before-PascalCase'     => [NormalizerInterface::PASCAL_CASE, '1foo', 'OneFoo'],
-            'digit-before-snake_case'     => [NormalizerInterface::SNAKE_CASE, '1foo', 'one_foo'],
-            'digit-before-UPPER_SNAKE'    => [NormalizerInterface::UPPER_SNAKE, '1foo', 'ONE_FOO'],
+            'nonascii-before-camelCase'   => [WordCase::Camel, '😫foo', 'tiredFaceFoo'],
+            'nonascii-before-PascalCase'  => [WordCase::Pascal, '😫foo', 'TiredFaceFoo'],
+            'nonascii-before-snake_case'  => [WordCase::LowerSnake, '😫foo', 'tired_face_foo'],
+            'nonascii-before-UPPER_SNAKE' => [WordCase::UpperSnake, '😫foo', 'TIRED_FACE_FOO'],
+            'nonascii-after-camelCase'    => [WordCase::Camel, 'foo😫', 'fooTiredFace'],
+            'nonascii-after-PascalCase'   => [WordCase::Pascal, 'foo😫', 'FooTiredFace'],
+            'nonascii-after-snake_case'   => [WordCase::LowerSnake, 'foo😫', 'foo_tired_face'],
+            'nonascii-after-UPPER_SNAKE'  => [WordCase::UpperSnake, 'foo😫', 'FOO_TIRED_FACE'],
+            'ascii-before-camelCase'      => [WordCase::Camel, '$foo', 'dollarFoo'],
+            'ascii-before-PascalCase'     => [WordCase::Pascal, '$foo', 'DollarFoo'],
+            'ascii-before-snake_case'     => [WordCase::LowerSnake, '$foo', 'dollar_foo'],
+            'ascii-before-UPPER_SNAKE'    => [WordCase::UpperSnake, '$foo', 'DOLLAR_FOO'],
+            'ascii-after-camelCase'       => [WordCase::Camel, 'foo$', 'fooDollar'],
+            'ascii-after-PascalCase'      => [WordCase::Pascal, 'foo$', 'FooDollar'],
+            'ascii-after-snake_case'      => [WordCase::LowerSnake, 'foo$', 'foo_dollar'],
+            'ascii-after-UPPER_SNAKE'     => [WordCase::UpperSnake, 'foo$', 'FOO_DOLLAR'],
+            'digit-before-camelCase'      => [WordCase::Camel, '1foo', 'oneFoo'],
+            'digit-before-PascalCase'     => [WordCase::Pascal, '1foo', 'OneFoo'],
+            'digit-before-snake_case'     => [WordCase::LowerSnake, '1foo', 'one_foo'],
+            'digit-before-UPPER_SNAKE'    => [WordCase::UpperSnake, '1foo', 'ONE_FOO'],
         ];
     }
 
     public function testNormalizeUsesSeparators(): void
     {
         $expected = 'FooBarBaz';
-        $actual   = $this->getNormalizer(NormalizerInterface::PASCAL_CASE, '|/')
+        $actual   = $this->getNormalizer(WordCase::Pascal, '|/')
             ->normalize('foo|bar /baz');
         self::assertSame($expected, $actual);
-    }
-
-    public function testConstructInvalidCaseThrowsException(): void
-    {
-        $case = 'tough';
-        self::expectException(NormalizerException::class);
-        self::expectExceptionMessage("Invalid case '$case'");
-        $this->getNormalizer($case);
     }
 
     public function testPrepareSuffixAllowsNullAndAssertionErrorThrown(): void
@@ -134,7 +129,7 @@ final class AbstractNormalizerTest extends TestCase
 
         try {
             $normalizer = $this->getNormalizer(
-                NormalizerInterface::CAMEL_CASE,
+                WordCase::Camel,
                 NormalizerInterface::DEFAULT_SEPARATORS,
                 null
             );
@@ -155,7 +150,7 @@ final class AbstractNormalizerTest extends TestCase
         self::expectException(NormalizerException::class);
         self::expectExceptionMessage("Invalid reserved word suffix");
         $this->getNormalizer(
-            NormalizerInterface::CAMEL_CASE,
+            WordCase::Camel,
             NormalizerInterface::DEFAULT_SEPARATORS,
             $suffix
         );
@@ -217,7 +212,7 @@ final class AbstractNormalizerTest extends TestCase
      * @psalm-suppress InternalMethod
      */
     private function getNormalizer(
-        string $case = NormalizerInterface::PASCAL_CASE,
+        WordCase $case = WordCase::Pascal,
         string $separators = NormalizerInterface::DEFAULT_SEPARATORS,
         string|null $suffix = 'Reserved'
     ): AbstractNormalizer {

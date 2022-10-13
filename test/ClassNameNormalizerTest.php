@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace KynxTest\CodeUtils;
 
 use Kynx\CodeUtils\ClassNameNormalizer;
-use Kynx\CodeUtils\NormalizerInterface;
+use Kynx\CodeUtils\WordCase;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @uses \Kynx\CodeUtils\AbstractNormalizer
+ * @uses \Kynx\CodeUtils\PhpLabel
+ * @uses \Kynx\CodeUtils\WordCase
  *
  * @covers \Kynx\CodeUtils\ClassNameNormalizer
  */
@@ -18,7 +20,7 @@ final class ClassNameNormalizerTest extends TestCase
     /**
      * @dataProvider classNameProvider
      */
-    public function testNormalize(string $className, string $case, string $expected): void
+    public function testNormalize(string $className, WordCase $case, string $expected): void
     {
         $normalizer = new ClassNameNormalizer('Reserved', $case);
         $actual     = $normalizer->normalize($className);
@@ -28,21 +30,21 @@ final class ClassNameNormalizerTest extends TestCase
     public function classNameProvider(): array
     {
         return [
-            'unicode_spellout'   => ['€', NormalizerInterface::PASCAL_CASE, 'Euro'],
-            'ascii_spellout'     => ['$', NormalizerInterface::PASCAL_CASE, 'Dollar'],
-            'reserved'           => ['global\fashion', NormalizerInterface::PASCAL_CASE, 'GlobalReserved\Fashion'],
-            'leading_backslash'  => ['\foo\bar', NormalizerInterface::PASCAL_CASE, 'Foo\Bar'],
-            'trailing_backslash' => ['foo\bar\\', NormalizerInterface::PASCAL_CASE, 'Foo\Bar'],
-            'empty_namespace'    => ['foo\\ \\bar', NormalizerInterface::PASCAL_CASE, 'Foo\Bar'],
-            'leading_digits'     => ['cat\9lives', NormalizerInterface::PASCAL_CASE, 'Cat\NineLives'],
-            'camelCase'          => ['home \ sweet home', NormalizerInterface::CAMEL_CASE, 'home\sweetHome'],
+            'unicode_spellout'   => ['€', WordCase::Pascal, 'Euro'],
+            'ascii_spellout'     => ['$', WordCase::Pascal, 'Dollar'],
+            'reserved'           => ['global\fashion', WordCase::Pascal, 'GlobalReserved\Fashion'],
+            'leading_backslash'  => ['\foo\bar', WordCase::Pascal, 'Foo\Bar'],
+            'trailing_backslash' => ['foo\bar\\', WordCase::Pascal, 'Foo\Bar'],
+            'empty_namespace'    => ['foo\\ \\bar', WordCase::Pascal, 'Foo\Bar'],
+            'leading_digits'     => ['cat\9lives', WordCase::Pascal, 'Cat\NineLives'],
+            'camelCase'          => ['home \ sweet home', WordCase::Camel, 'home\sweetHome'],
         ];
     }
 
     public function testNormalizeUsesSeparators(): void
     {
         $expected   = 'FooBarBaz';
-        $normalizer = new ClassNameNormalizer('Reserved', NormalizerInterface::PASCAL_CASE, '|/');
+        $normalizer = new ClassNameNormalizer('Reserved', WordCase::Pascal, '|/');
         $actual     = $normalizer->normalize('Foo|Bar/ Baz');
         self::assertSame($expected, $actual);
     }

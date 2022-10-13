@@ -9,17 +9,13 @@ use IntlChar;
 use IntlCodePointBreakIterator;
 use Transliterator;
 
-use function array_filter;
 use function array_map;
-use function array_shift;
 use function array_slice;
 use function assert;
 use function explode;
 use function implode;
 use function in_array;
-use function lcfirst;
 use function ord;
-use function preg_match;
 use function preg_replace;
 use function str_ends_with;
 use function str_replace;
@@ -38,13 +34,6 @@ use function trim;
  */
 abstract class AbstractNormalizer implements NormalizerInterface
 {
-    private const VALID_CASES = [
-        self::CAMEL_CASE,
-        self::PASCAL_CASE,
-        self::SNAKE_CASE,
-        self::UPPER_SNAKE,
-    ];
-
     /**
      * @see https://www.php.net/manual/en/reserved.keywords.php
      * @see https://www.php.net/manual/en/reserved.other-reserved-words.php
@@ -211,16 +200,12 @@ abstract class AbstractNormalizer implements NormalizerInterface
 
     private Transliterator $latinAscii;
     private IntlCodePointBreakIterator $codePoints;
-    private string $case;
+    private WordCase $case;
     private string|null $suffix;
     private string $separators;
 
-    public function __construct(string|null $suffix, string $case, string $separators = self::DEFAULT_SEPARATORS)
+    public function __construct(string|null $suffix, WordCase $case, string $separators = self::DEFAULT_SEPARATORS)
     {
-        if (! in_array($case, self::VALID_CASES)) {
-            throw NormalizerException::invalidCase($case, self::VALID_CASES);
-        }
-
         $latinAscii = Transliterator::create('NFC; Any-Latin; Latin-ASCII;');
         assert($latinAscii instanceof Transliterator);
 
@@ -279,14 +264,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
 
     protected function toCase(string $string): string
     {
-        /** @var list<string> $parts */
-        $parts = array_filter(explode(' ', $string));
-        return match ($this->case) {
-            self::CAMEL_CASE  => $this->toCamelCase($parts),
-            self::PASCAL_CASE => $this->toPascalCase($parts),
-            self::SNAKE_CASE  => $this->toSnakeCase($parts),
-            self::UPPER_SNAKE => $this->toUpperSnake($parts),
-        };
+        return $this->case->convert($string);
     }
 
     protected function sanitizeReserved(string $string): string
@@ -299,20 +277,20 @@ abstract class AbstractNormalizer implements NormalizerInterface
         return $string;
     }
 
-    private function prepareSuffix(string|null $suffix, string $case): string|null
+    private function prepareSuffix(string|null $suffix, WordCase $case): string|null
     {
         if ($suffix === null) {
             return null;
         }
 
-        if (! preg_match('/^[a-zA-Z0-9_\x80-\xff]+$/', $suffix)) {
+        if (! PhpLabel::Suffix->isValid($suffix)) {
             throw NormalizerException::invalidSuffix($suffix);
         }
 
-        if (! in_array($case, [self::SNAKE_CASE, self::UPPER_SNAKE], true)) {
-            return $suffix;
-        }
-        return str_starts_with($suffix, '_') ? $suffix : '_' . $suffix;
+        return match ($case) {
+            WordCase::Camel, WordCase::Pascal => $suffix,
+            default                           => str_starts_with($suffix, '_') ? $suffix : '_' . $suffix,
+        };
     }
 
     private function spellOutNonAscii(string $string): string
@@ -364,38 +342,5 @@ abstract class AbstractNormalizer implements NormalizerInterface
         }
 
         return implode(' ', $speltOut);
-    }
-
-    /**
-     * @param list<string> $parts
-     */
-    private function toCamelCase(array $parts): string
-    {
-        $first = lcfirst(array_shift($parts));
-        return $first . $this->toPascalCase($parts);
-    }
-
-    /**
-     * @param list<string> $parts
-     */
-    private function toPascalCase(array $parts): string
-    {
-        return implode('', array_map('ucfirst', $parts));
-    }
-
-    /**
-     * @param list<string> $parts
-     */
-    private function toSnakeCase(array $parts): string
-    {
-        return implode('_', array_map('strtolower', $parts));
-    }
-
-    /**
-     * @param list<string> $parts
-     */
-    private function toUpperSnake(array $parts): string
-    {
-        return implode('_', array_map('strtoupper', $parts));
     }
 }

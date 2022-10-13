@@ -37,13 +37,4 @@ final class NormalizerExceptionTest extends TestCase
         $actual   = NormalizerException::invalidSuffix($suffix);
         self::assertSame($expected, $actual->getMessage());
     }
-
-    public function testInvalidCase(): void
-    {
-        $case     = 'squiggly';
-        $valid    = ['straight', 'bent'];
-        $expected = "Invalid case '$case': expected one of 'straight', 'bent'";
-        $actual   = NormalizerException::invalidCase($case, $valid);
-        self::assertSame($expected, $actual->getMessage());
-    }
 }
