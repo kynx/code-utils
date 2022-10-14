@@ -68,14 +68,60 @@ become `ClassController`.
 
 The results may not be pretty. If for some mad reason your input contains ` ͖`  - put your glasses on! - the label will 
 contain `CombiningRightArrowheadAndUpArrowheadBelow`. But it _is_ valid PHP, and stands a chance of being as unique as 
-the original. But speaking of which...
+the original. Which brings me to...
 
-### Uniqueness
 
-The normalization process reduces around a million Unicode code points down to just 162 ASCII characters. Then we mangle 
-it further by stripping separators, reducing whitespace and turning it into camelCase, snake_case or whatever 
-your programming preference. It's gonna be lossy - nothing we can do about that. Ideally this library would provide a
-utility for guaranteeing uniqueness across a set of labels, but I haven't written it yet. Feel free to contribute!
+## Unique labelers
+
+The normalization process reduces around a million Unicode code points down to just 162 ASCII characters. Then it 
+mangles the label further by stripping separators, reducing whitespace and turning it into camelCase, snake_case or 
+whatever your programming preference. It's gonna be lossy - nothing we can do about that.
+
+The unique labelers' job is to add back lost uniqueness, using a `UniqueStrategyInterface` to decorate any non-unique
+class names in the list it is given.
+
+To guarantee uniqueness within a set of class name labels, use the `UniqueClassLabeller`:
+```php
+<?php
+
+use Kynx\CodeUtils\ClassNameNormalizer;
+use Kynx\CodeUtils\UniqueClassLabeler;
+use Kynx\CodeUtils\UniqueStrategy\NumberSuffix;
+
+$labeler = new UniqueClassLabeler(new ClassNameNormalizer('Handler'), new NumberSuffix());
+
+$labels = ['Déjà vu', 'foo', 'deja vu'];
+$unique = $labeler->getUnique($labels);
+var_dump($unique);
+```
+
+outputs:
+```
+array(3) {
+  'Déjà vu' =>
+  string(7) "DejaVu1"
+  'foo' =>
+  string(3) "Foo"
+  'deja vu' =>
+  string(7) "DejaVu2"
+}
+```
+
+There are labelers for each of the normalizers: `UniqueClassLabeler`, `UniqueConstantLabeler`, `UniquePropertyLabeler` 
+and `UniqueVariableLabeler`. Along with the `NumberSuffix` implementation of `UniqueStrategyInterface`, we provide a 
+`SpellOutOrdinalPrefix` strategy. Using that instead of `NumberSuffix` above would output:
+```
+array(3) {
+  'Déjà vu' =>
+  string(11) "firstDejaVu"
+  'foo' =>
+  string(3) "Foo"
+  'deja vu' =>
+  string(12) "secondDejaVu"
+}
+```
+
+Kinda cute, but a bit verbose for my taste.
 
 
 [transliterating]: https://unicode-org.github.io/icu/userguide/transforms/general/#script-transliteration
