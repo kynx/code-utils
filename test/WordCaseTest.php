@@ -24,17 +24,19 @@ final class WordCaseTest extends TestCase
     public function stringProvider(): array
     {
         return [
-            'empty'       => [WordCase::LowerSnake, '', ''],
-            'just_spaces' => [WordCase::LowerSnake, "  ", ''],
-            'trim'        => [WordCase::LowerSnake, " foo ", 'foo'],
-            'numbers'     => [WordCase::LowerSnake, "foo123 bar", 'foo123_bar'],
-            'underscore'  => [WordCase::LowerSnake, "one two_three", "one_two_three"],
-            'camel'       => [WordCase::Camel, 'FOO bAR', 'fooBar'],
-            'camelAbbr'   => [WordCase::Camel, 'a b foo', 'abFoo'],
-            'lower_snake' => [WordCase::LowerSnake, 'FOO BAR', 'foo_bar'],
-            'Pascal'      => [WordCase::Pascal, 'fOO bAR', 'FooBar'],
-            'PascalAbbr'  => [WordCase::Pascal, 'a b foo', 'AbFoo'],
-            'UPPER_SNAKE' => [WordCase::UpperSnake, 'foo bar', 'FOO_BAR'],
+            'empty'          => [WordCase::LowerSnake, '', ''],
+            'just_spaces'    => [WordCase::LowerSnake, "  ", ''],
+            'trim'           => [WordCase::LowerSnake, " foo ", 'foo'],
+            'numbers'        => [WordCase::LowerSnake, "foo123 bar", 'foo123_bar'],
+            'underscore'     => [WordCase::LowerSnake, "one two_three", "one_two_three"],
+            'camel'          => [WordCase::Camel, 'Foo bar', 'fooBar'],
+            'camelAbbr'      => [WordCase::Camel, 'a b foo', 'abFoo'],
+            'camelPreserve'  => [WordCase::Camel, 'FooBar', 'fooBar'],
+            'lower_snake'    => [WordCase::LowerSnake, 'FOO BAR', 'foo_bar'],
+            'Pascal'         => [WordCase::Pascal, 'foo bar', 'FooBar'],
+            'PascalAbbr'     => [WordCase::Pascal, 'a b foo', 'AbFoo'],
+            'PascalPreserve' => [WordCase::Pascal, 'fooBar', 'FooBar'],
+            'UPPER_SNAKE'    => [WordCase::UpperSnake, 'foo bar', 'FOO_BAR'],
         ];
     }
 }
