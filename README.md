@@ -113,11 +113,11 @@ and `UniqueVariableLabeler`. Along with the `NumberSuffix` implementation of `Un
 ```
 array(3) {
   'Déjà vu' =>
-  string(11) "firstDejaVu"
+  string(11) "FirstDejaVu"
   'foo' =>
   string(3) "Foo"
   'deja vu' =>
-  string(12) "secondDejaVu"
+  string(12) "SecondDejaVu"
 }
 ```
 
