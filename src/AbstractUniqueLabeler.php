@@ -6,6 +6,7 @@ namespace Kynx\Code\Normalizer;
 
 use Kynx\Code\Normalizer\UniqueStrategy\UniqueStrategyInterface;
 
+use function array_map;
 use function array_search;
 use function assert;
 use function is_string;
@@ -70,19 +71,11 @@ abstract class AbstractUniqueLabeler
     {
         if ($this->caseSensitive) {
             $key = array_search($needle, $haystack, true);
-            assert(is_string($key));
-            return $key;
+        } else {
+            $key = array_search(strtolower($needle), array_map('strtolower', $haystack));
         }
 
-        $needle = strtolower($needle);
-        $key    = null;
-        foreach ($haystack as $key => $value) {
-            if ($needle === strtolower($value)) {
-                break;
-            }
-        }
         assert(is_string($key));
-
         return $key;
     }
 }
