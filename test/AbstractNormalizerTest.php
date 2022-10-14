@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils;
+namespace KynxTest\Code\Normalizer;
 
 use AssertionError;
-use Kynx\CodeUtils\AbstractNormalizer;
-use Kynx\CodeUtils\NormalizerException;
-use Kynx\CodeUtils\NormalizerInterface;
-use Kynx\CodeUtils\WordCase;
+use Kynx\Code\Normalizer\AbstractNormalizer;
+use Kynx\Code\Normalizer\NormalizerException;
+use Kynx\Code\Normalizer\NormalizerInterface;
+use Kynx\Code\Normalizer\WordCase;
 use PHPUnit\Framework\TestCase;
 
 use function version_compare;
@@ -16,11 +16,11 @@ use function version_compare;
 use const PHP_VERSION;
 
 /**
- * @uses \Kynx\CodeUtils\NormalizerException
- * @uses \Kynx\CodeUtils\PhpLabel
- * @uses \Kynx\CodeUtils\WordCase
+ * @uses \Kynx\Code\Normalizer\NormalizerException
+ * @uses \Kynx\Code\Normalizer\PhpLabel
+ * @uses \Kynx\Code\Normalizer\WordCase
  *
- * @covers \Kynx\CodeUtils\AbstractNormalizer
+ * @covers \Kynx\Code\Normalizer\AbstractNormalizer
  */
 final class AbstractNormalizerTest extends TestCase
 {

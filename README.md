@@ -16,7 +16,7 @@ The following code (forgive the Japanese - a certain translation tool tells me i
 ```php
 <?php
 
-use Kynx\CodeUtls\ClassNameNormalizer;
+use Kynx\Code\Normalizer\ClassNameNormalizer;
 
 $normalizer = new ClassNameNormalizer('Controller');
 $namespace = $normalizer->normalize('ペット \ ショップ');
@@ -32,7 +32,7 @@ and:
 ```php
 <?php
 
-use Kynx\CodeUtls\PropertyNameNormalizer;
+use Kynx\Code\Normalizer\PropertyNameNormalizer;
 
 $normalizer = new PropertyNameNormalizer();
 $property = $normalizer->normalize('2 $ bill');
@@ -84,9 +84,9 @@ To guarantee uniqueness within a set of class name labels, use the `UniqueClassL
 ```php
 <?php
 
-use Kynx\CodeUtils\ClassNameNormalizer;
-use Kynx\CodeUtils\UniqueClassLabeler;
-use Kynx\CodeUtils\UniqueStrategy\NumberSuffix;
+use Kynx\Code\Normalizer\ClassNameNormalizer;
+use Kynx\Code\Normalizer\UniqueClassLabeler;
+use Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix;
 
 $labeler = new UniqueClassLabeler(new ClassNameNormalizer('Handler'), new NumberSuffix());
 

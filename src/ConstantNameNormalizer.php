@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
 /**
- * @see \KynxTest\CodeUtils\ConstantNameNormalizerTest
+ * @see \KynxTest\Code\Normalizer\ConstantNameNormalizerTest
  */
 final class ConstantNameNormalizer extends AbstractNormalizer
 {

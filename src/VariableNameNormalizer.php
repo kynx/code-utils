@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
 use function str_starts_with;
 use function strtolower;
 
 /**
- * @see \KynxTest\CodeUtils\VariableNameNormalizerTest
+ * @see \KynxTest\Code\Normalizer\VariableNameNormalizerTest
  */
 final class VariableNameNormalizer extends AbstractNormalizer
 {

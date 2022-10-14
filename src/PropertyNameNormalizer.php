@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
 /**
- * @see \KynxTest\CodeUtils\PropertyNameNormalizerTest
+ * @see \KynxTest\Code\Normalizer\PropertyNameNormalizerTest
  */
 final class PropertyNameNormalizer extends AbstractNormalizer
 {

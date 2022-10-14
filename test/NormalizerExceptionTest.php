@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils;
+namespace KynxTest\Code\Normalizer;
 
-use Kynx\CodeUtils\NormalizerException;
+use Kynx\Code\Normalizer\NormalizerException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Kynx\CodeUtils\NormalizerException
+ * @covers \Kynx\Code\Normalizer\NormalizerException
  */
 final class NormalizerExceptionTest extends TestCase
 {

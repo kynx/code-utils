@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils;
+namespace KynxTest\Code\Normalizer;
 
-use Kynx\CodeUtils\AbstractUniqueLabeler;
-use Kynx\CodeUtils\PropertyNameNormalizer;
-use Kynx\CodeUtils\UniqueStrategy\NumberSuffix;
+use Kynx\Code\Normalizer\AbstractUniqueLabeler;
+use Kynx\Code\Normalizer\PropertyNameNormalizer;
+use Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @uses \Kynx\CodeUtils\AbstractNormalizer
- * @uses \Kynx\CodeUtils\PropertyNameNormalizer
- * @uses \Kynx\CodeUtils\UniqueStrategy\NumberSuffix
- * @uses \Kynx\CodeUtils\WordCase
+ * @uses \Kynx\Code\Normalizer\AbstractNormalizer
+ * @uses \Kynx\Code\Normalizer\PropertyNameNormalizer
+ * @uses \Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix
+ * @uses \Kynx\Code\Normalizer\WordCase
  *
- * @covers \Kynx\CodeUtils\AbstractUniqueLabeler
+ * @covers \Kynx\Code\Normalizer\AbstractUniqueLabeler
  * @psalm-suppress InternalMethod
  */
 final class AbstractUniqueLabelerTest extends TestCase

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils\UniqueStrategy;
+namespace Kynx\Code\Normalizer\UniqueStrategy;
 
-use Kynx\CodeUtils\WordCase;
+use Kynx\Code\Normalizer\WordCase;
 
 use function assert;
 use function ucfirst;
 
 /**
- * @see \KynxTest\CodeUtils\UniqueStrategy\NumberSuffixTest
+ * @see \KynxTest\Code\Normalizer\UniqueStrategy\NumberSuffixTest
  */
 final class NumberSuffix implements UniqueStrategyInterface
 {

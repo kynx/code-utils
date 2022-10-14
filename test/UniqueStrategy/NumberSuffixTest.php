@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils\UniqueStrategy;
+namespace KynxTest\Code\Normalizer\UniqueStrategy;
 
-use Kynx\CodeUtils\UniqueStrategy\NumberSuffix;
-use Kynx\CodeUtils\WordCase;
+use Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix;
+use Kynx\Code\Normalizer\WordCase;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @uses \Kynx\CodeUtils\WordCase
+ * @uses \Kynx\Code\Normalizer\WordCase
  *
- * @covers \Kynx\CodeUtils\UniqueStrategy\NumberSuffix
+ * @covers \Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix
  */
 final class NumberSuffixTest extends TestCase
 {

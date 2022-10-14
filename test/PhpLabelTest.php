@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils;
+namespace KynxTest\Code\Normalizer;
 
-use Kynx\CodeUtils\PhpLabel;
+use Kynx\Code\Normalizer\PhpLabel;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Kynx\CodeUtils\PhpLabel
+ * @covers \Kynx\Code\Normalizer\PhpLabel
  */
 final class PhpLabelTest extends TestCase
 {

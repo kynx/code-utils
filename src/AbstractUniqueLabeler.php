@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
-use Kynx\CodeUtils\UniqueStrategy\UniqueStrategyInterface;
+use Kynx\Code\Normalizer\UniqueStrategy\UniqueStrategyInterface;
 
 use function array_search;
 use function assert;
@@ -12,7 +12,7 @@ use function is_string;
 use function strtolower;
 
 /**
- * @see \KynxTest\CodeUtils\AbstractUniqueLabellerTest
+ * @see \KynxTest\Code\Normalizer\AbstractUniqueLabellerTest
  */
 abstract class AbstractUniqueLabeler
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
 interface NormalizerInterface
 {

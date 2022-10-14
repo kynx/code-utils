@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
 use function array_filter;
 use function explode;
 use function implode;
 
 /**
- * @see \KynxTest\CodeUtils\ClassNameNormalizerTest
+ * @see \KynxTest\Code\Normalizer\ClassNameNormalizerTest
  */
 final class ClassNameNormalizer extends AbstractNormalizer
 {

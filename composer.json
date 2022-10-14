@@ -32,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Kynx\\CodeUtils\\": "src/"
+            "Kynx\\Code\\Normalizer\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "KynxTest\\CodeUtils\\": "test/"
+            "KynxTest\\Code\\Normalizer\\": "test/"
         }
     },
     "scripts": {
