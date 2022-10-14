@@ -42,7 +42,7 @@ enum WordCase: string
      */
     private function toCamel(array $parts): string
     {
-        $ucFirst  = array_map(fn (string $part): string => ucfirst(strtolower($part)), $parts);
+        $ucFirst  = array_map(fn (string $part): string => ucfirst($part), $parts);
         $previous = '';
         foreach ($ucFirst as $i => $part) {
             if ($i === 0) {
@@ -70,7 +70,7 @@ enum WordCase: string
      */
     private function toPascal(array $parts): string
     {
-        $ucFirst  = array_map(fn (string $part): string => ucfirst(strtolower($part)), $parts);
+        $ucFirst  = array_map(fn (string $part): string => ucfirst($part), $parts);
         $previous = '';
         foreach ($ucFirst as $i => $part) {
             if (strlen($previous) === 1 && strlen($part) === 1) {
