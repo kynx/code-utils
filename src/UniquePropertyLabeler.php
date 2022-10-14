@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
-use Kynx\CodeUtils\UniqueStrategy\UniqueStrategyInterface;
+use Kynx\Code\Normalizer\UniqueStrategy\UniqueStrategyInterface;
 
 /**
- * @see \KynxTest\CodeUtils\UniquePropertyLabellerTest
+ * @see \KynxTest\Code\Normalizer\UniquePropertyLabellerTest
  */
 final class UniquePropertyLabeler extends AbstractUniqueLabeler
 {

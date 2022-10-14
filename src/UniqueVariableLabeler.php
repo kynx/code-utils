@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
-use Kynx\CodeUtils\UniqueStrategy\UniqueStrategyInterface;
+use Kynx\Code\Normalizer\UniqueStrategy\UniqueStrategyInterface;
 
 final class UniqueVariableLabeler extends AbstractUniqueLabeler
 {

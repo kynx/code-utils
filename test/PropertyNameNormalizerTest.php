@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils;
+namespace KynxTest\Code\Normalizer;
 
-use Kynx\CodeUtils\PropertyNameNormalizer;
-use Kynx\CodeUtils\WordCase;
+use Kynx\Code\Normalizer\PropertyNameNormalizer;
+use Kynx\Code\Normalizer\WordCase;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @uses \Kynx\CodeUtils\AbstractNormalizer
- * @uses \Kynx\CodeUtils\PhpLabel
- * @uses \Kynx\CodeUtils\WordCase
+ * @uses \Kynx\Code\Normalizer\AbstractNormalizer
+ * @uses \Kynx\Code\Normalizer\PhpLabel
+ * @uses \Kynx\Code\Normalizer\WordCase
  *
- * @covers \Kynx\CodeUtils\PropertyNameNormalizer
+ * @covers \Kynx\Code\Normalizer\PropertyNameNormalizer
  */
 final class PropertyNameNormalizerTest extends TestCase
 {

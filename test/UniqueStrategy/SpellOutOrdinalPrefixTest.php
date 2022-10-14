@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils\UniqueStrategy;
+namespace KynxTest\Code\Normalizer\UniqueStrategy;
 
-use Kynx\CodeUtils\UniqueStrategy\SpellOutOrdinalPrefix;
-use Kynx\CodeUtils\WordCase;
+use Kynx\Code\Normalizer\UniqueStrategy\SpellOutOrdinalPrefix;
+use Kynx\Code\Normalizer\WordCase;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @uses \Kynx\CodeUtils\WordCase
+ * @uses \Kynx\Code\Normalizer\WordCase
  *
- * @covers \Kynx\CodeUtils\UniqueStrategy\SpellOutOrdinalPrefix
+ * @covers \Kynx\Code\Normalizer\UniqueStrategy\SpellOutOrdinalPrefix
  */
 final class SpellOutOrdinalPrefixTest extends TestCase
 {

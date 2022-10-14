@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils;
+namespace KynxTest\Code\Normalizer;
 
-use Kynx\CodeUtils\ConstantNameNormalizer;
-use Kynx\CodeUtils\UniqueConstantLabeler;
-use Kynx\CodeUtils\UniqueStrategy\NumberSuffix;
-use Kynx\CodeUtils\WordCase;
+use Kynx\Code\Normalizer\ConstantNameNormalizer;
+use Kynx\Code\Normalizer\UniqueConstantLabeler;
+use Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix;
+use Kynx\Code\Normalizer\WordCase;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @uses \Kynx\CodeUtils\AbstractNormalizer
- * @uses \Kynx\CodeUtils\AbstractUniqueLabeler
- * @uses \Kynx\CodeUtils\ConstantNameNormalizer
- * @uses \Kynx\CodeUtils\UniqueStrategy\NumberSuffix
- * @uses \Kynx\CodeUtils\PhpLabel
- * @uses \Kynx\CodeUtils\WordCase
+ * @uses \Kynx\Code\Normalizer\AbstractNormalizer
+ * @uses \Kynx\Code\Normalizer\AbstractUniqueLabeler
+ * @uses \Kynx\Code\Normalizer\ConstantNameNormalizer
+ * @uses \Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix
+ * @uses \Kynx\Code\Normalizer\PhpLabel
+ * @uses \Kynx\Code\Normalizer\WordCase
  *
- * @covers \Kynx\CodeUtils\UniqueConstantLabeler
+ * @covers \Kynx\Code\Normalizer\UniqueConstantLabeler
  */
 final class UniqueConstantLabelerTest extends TestCase
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace KynxTest\CodeUtils;
+namespace KynxTest\Code\Normalizer;
 
-use Kynx\CodeUtils\WordCase;
+use Kynx\Code\Normalizer\WordCase;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Kynx\CodeUtils\WordCase
+ * @covers \Kynx\Code\Normalizer\WordCase
  */
 final class WordCaseTest extends TestCase
 {

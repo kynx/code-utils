@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
 use function array_map;
 use function assert;
@@ -15,7 +15,7 @@ use function trim;
 use function ucfirst;
 
 /**
- * @see \KynxTest\CodeUtils\WordCaseTest
+ * @see \KynxTest\Code\Normalizer\WordCaseTest
  */
 enum WordCase: string
 {

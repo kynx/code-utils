@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
 use IntlBreakIterator;
 use IntlChar;
@@ -30,7 +30,7 @@ use function trim;
  *
  * @internal
  *
- * @see \KynxTest\CodeUtils\AbstractNormalizerTest
+ * @see \KynxTest\Code\Normalizer\AbstractNormalizerTest
  */
 abstract class AbstractNormalizer implements NormalizerInterface
 {

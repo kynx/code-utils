@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils;
+namespace Kynx\Code\Normalizer;
 
 use RuntimeException;
 
 use function sprintf;
 
 /**
- * @see \KynxTest\CodeUtils\NormalizerExceptionTest
+ * @see \KynxTest\Code\Normalizer\NormalizerExceptionTest
  */
 final class NormalizerException extends RuntimeException
 {

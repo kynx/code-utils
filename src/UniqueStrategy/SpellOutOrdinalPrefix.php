@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Kynx\CodeUtils\UniqueStrategy;
+namespace Kynx\Code\Normalizer\UniqueStrategy;
 
-use Kynx\CodeUtils\WordCase;
+use Kynx\Code\Normalizer\WordCase;
 use NumberFormatter;
 
 use function ucfirst;
 
 /**
- * @see \KynxTest\CodeUtils\UniqueStrategy\SpellOutOrdinalPrefixTest
+ * @see \KynxTest\Code\Normalizer\UniqueStrategy\SpellOutOrdinalPrefixTest
  */
 final class SpellOutOrdinalPrefix implements UniqueStrategyInterface
 {
