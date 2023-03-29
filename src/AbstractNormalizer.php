@@ -271,7 +271,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
     {
         assert($this->suffix !== null);
 
-        if (in_array(strtolower($string), self::RESERVED, true)) {
+        if (in_array(strtolower($string), static::RESERVED, true)) {
             return $string . $this->suffix;
         }
         return $string;
