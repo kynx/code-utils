@@ -33,7 +33,10 @@ final class AbstractNormalizerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function labelProvider(): array
+    /**
+     * @return array<string, list{string, string}>
+     */
+    public static function labelProvider(): array
     {
         return [
             'pet_shop'         => ['ペット ショップ', 'PettoShoppu'],
@@ -65,7 +68,10 @@ final class AbstractNormalizerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function caseProvider(): array
+    /**
+     * @return array<string, list{WordCase, string}>
+     */
+    public static function caseProvider(): array
     {
         return [
             'camelCase'   => [WordCase::Camel, 'fooBar'],
@@ -84,7 +90,10 @@ final class AbstractNormalizerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function spellOutCaseProvider(): array
+    /**
+     * @return array<string, list{WordCase, string, string}>
+     */
+    public static function spellOutCaseProvider(): array
     {
         return [
             'nonascii-before-camelCase'   => [WordCase::Camel, '😫foo', 'tiredFaceFoo'],
@@ -156,7 +165,10 @@ final class AbstractNormalizerTest extends TestCase
         );
     }
 
-    public function invalidSuffixProvider(): array
+    /**
+     * @return array<string, list{string}>
+     */
+    public static function invalidSuffixProvider(): array
     {
         return [
             'empty'   => [''],

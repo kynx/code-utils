@@ -27,7 +27,10 @@ final class PropertyNameNormalizerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function propertyNameProvider(): array
+    /**
+     * @return array<string, list{string, WordCase, string}>
+     */
+    public static function propertyNameProvider(): array
     {
         return [
             'unicode_spellout' => ['€', WordCase::Camel, 'euro'],

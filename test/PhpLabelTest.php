@@ -21,7 +21,10 @@ final class PhpLabelTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function isValidProvider(): array
+    /**
+     * @return array<string, list{PhpLabel, string, bool}>
+     */
+    public static function isValidProvider(): array
     {
         return [
             'label_empty'            => [PhpLabel::Label, '', false],

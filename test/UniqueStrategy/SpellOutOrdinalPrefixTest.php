@@ -25,7 +25,10 @@ final class SpellOutOrdinalPrefixTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function labelProvider(): array
+    /**
+     * @return array<string, list{WordCase, string, int, string}>
+     */
+    public static function labelProvider(): array
     {
         return [
             'first_snake'         => [WordCase::LowerSnake, 'snake', 1, 'first_snake'],

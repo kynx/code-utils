@@ -21,7 +21,10 @@ final class WordCaseTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function stringProvider(): array
+    /**
+     * @return array<string, list{WordCase, string, string}>
+     */
+    public static function stringProvider(): array
     {
         return [
             'empty'          => [WordCase::LowerSnake, '', ''],
