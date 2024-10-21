@@ -18,7 +18,7 @@ final class NormalizerException extends RuntimeException
         return new self(sprintf(
             "Cannot transliterate '%s': %s",
             $string,
-            $error ?: "Unknown error"
+            $error !== false ? $error : "Unknown error"
         ));
     }
 

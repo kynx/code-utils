@@ -26,16 +26,20 @@ final class AbstractUniqueLabelerTest extends TestCase
      */
     public function testGetUnique(array $labels, bool $caseSensitive, array $expected): void
     {
-        $namer  = self::getMockForAbstractClass(AbstractUniqueLabeler::class, [
+        $namer  = new class (
             new PropertyNameNormalizer(),
             new NumberSuffix(),
-            $caseSensitive,
-        ]);
+            $caseSensitive
+        ) extends AbstractUniqueLabeler {
+        };
         $actual = $namer->getUnique($labels);
         self::assertSame($expected, $actual);
     }
 
-    public function labelProvider(): array
+    /**
+     * @return array<string, list{list<string>, bool, array<string, string>}>
+     */
+    public static function labelProvider(): array
     {
         return [
             'all_unique'       => [['a', 'b', 'c'], true, ['a' => 'a', 'b' => 'b', 'c' => 'c']],

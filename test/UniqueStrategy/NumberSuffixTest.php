@@ -25,7 +25,10 @@ final class NumberSuffixTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function labelProvider(): array
+    /**
+     * @return array<string, list{WordCase, string, int, string}>
+     */
+    public static function labelProvider(): array
     {
         return [
             'first_snake'   => [WordCase::LowerSnake, 'foo', 1, 'foo_1'],
@@ -44,7 +47,10 @@ final class NumberSuffixTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function suffixLabelProvider(): array
+    /**
+     * @return array<string, list{WordCase, string, string}>
+     */
+    public static function suffixLabelProvider(): array
     {
         return [
             'camelCase'   => [WordCase::Camel, 'fooBar', 'fooBarVersion2'],

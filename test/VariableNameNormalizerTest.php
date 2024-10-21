@@ -31,7 +31,10 @@ final class VariableNameNormalizerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function variableNameProvider(): array
+    /**
+     * @return array<string, list{string, string, WordCase, string}>
+     */
+    public static function variableNameProvider(): array
     {
         return [
             'unicode_spellout' => ['€', 'me', WordCase::Camel, '$euro'],

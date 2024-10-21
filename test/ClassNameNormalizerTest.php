@@ -27,7 +27,10 @@ final class ClassNameNormalizerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function classNameProvider(): array
+    /**
+     * @return array<string, list{string, WordCase, string}>
+     */
+    public static function classNameProvider(): array
     {
         return [
             'unicode_spellout'   => ['€', WordCase::Pascal, 'Euro'],

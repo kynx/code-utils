@@ -27,7 +27,10 @@ final class ConstantNameNormalizerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function constantNameProvider(): array
+    /**
+     * @return array<string, list{string, WordCase, string}>
+     */
+    public static function constantNameProvider(): array
     {
         return [
             'unicode_spellout' => ['€ sign', WordCase::UpperSnake, 'EURO_SIGN'],

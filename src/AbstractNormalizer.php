@@ -37,6 +37,8 @@ abstract class AbstractNormalizer implements NormalizerInterface
     /**
      * @see https://www.php.net/manual/en/reserved.keywords.php
      * @see https://www.php.net/manual/en/reserved.other-reserved-words.php
+     *
+     * @var list<string>
      */
     protected const RESERVED = [
         'abstract',
@@ -318,7 +320,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
 
     private function spellOutNonAsciiChar(int $ord): string
     {
-        $speltOut = IntlChar::charName($ord);
+        $speltOut = (string) IntlChar::charName($ord);
 
         // 'EURO SIGN' -> 'euro'
         return implode(' ', array_map(function (string $part): string {
