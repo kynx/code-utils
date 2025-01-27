@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace KynxTest\Code\Normalizer;
 
+use Kynx\Code\Normalizer\AbstractNormalizer;
+use Kynx\Code\Normalizer\PhpLabel;
 use Kynx\Code\Normalizer\VariableNameNormalizer;
 use Kynx\Code\Normalizer\WordCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @uses \Kynx\Code\Normalizer\AbstractNormalizer
- * @uses \Kynx\Code\Normalizer\PhpLabel
- * @uses \Kynx\Code\Normalizer\WordCase
- *
- * @covers \Kynx\Code\Normalizer\VariableNameNormalizer
- */
+#[CoversClass(VariableNameNormalizer::class)]
+#[UsesClass(AbstractNormalizer::class)]
+#[UsesClass(PhpLabel::class)]
+#[UsesClass(WordCase::class)]
 final class VariableNameNormalizerTest extends TestCase
 {
-    /**
-     * @dataProvider variableNameProvider
-     */
+    #[DataProvider('variableNameProvider')]
     public function testNormalizeVariableName(
         string $variableName,
         string $thisReplacement,

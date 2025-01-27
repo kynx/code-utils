@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace KynxTest\Code\Normalizer;
 
 use Kynx\Code\Normalizer\WordCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Kynx\Code\Normalizer\WordCase
- */
+#[CoversClass(WordCase::class)]
 final class WordCaseTest extends TestCase
 {
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testConvert(WordCase $case, string $string, string $expected): void
     {
         $actual = $case->convert($string);

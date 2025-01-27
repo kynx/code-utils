@@ -6,16 +6,14 @@ namespace KynxTest\Code\Normalizer;
 
 use Kynx\Code\Normalizer\ClassConstantNameNormalizer;
 use Kynx\Code\Normalizer\WordCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Kynx\Code\Normalizer\ClassConstantNameNormalizer
- */
+#[CoversClass(ClassConstantNameNormalizer::class)]
 final class ClassConstantNameNormalizerTest extends TestCase
 {
-    /**
-     * @dataProvider constantNameProvider
-     */
+    #[DataProvider('constantNameProvider')]
     public function testNormalize(string $constantName, WordCase $case, string $expected): void
     {
         $normalizer = new ClassConstantNameNormalizer('RESERVED', $case);

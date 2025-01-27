@@ -6,18 +6,16 @@ namespace KynxTest\Code\Normalizer\UniqueStrategy;
 
 use Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix;
 use Kynx\Code\Normalizer\WordCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @uses \Kynx\Code\Normalizer\WordCase
- *
- * @covers \Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix
- */
+#[CoversClass(NumberSuffix::class)]
+#[UsesClass(WordCase::class)]
 final class NumberSuffixTest extends TestCase
 {
-    /**
-     * @dataProvider labelProvider
-     */
+    #[DataProvider('labelProvider')]
     public function testGenerateUniqueName(WordCase $case, string $label, int $occurrence, string $expected): void
     {
         $strategy = new NumberSuffix($case);
@@ -37,9 +35,7 @@ final class NumberSuffixTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider suffixLabelProvider
-     */
+    #[DataProvider('suffixLabelProvider')]
     public function testGenerateUniqueNameUsesSuffix(WordCase $case, string $label, string $expected): void
     {
         $strategy = new NumberSuffix($case, 'version');

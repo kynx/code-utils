@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace KynxTest\Code\Normalizer;
 
 use Kynx\Code\Normalizer\NormalizerException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Kynx\Code\Normalizer\NormalizerException
- */
+#[CoversClass(NormalizerException::class)]
 final class NormalizerExceptionTest extends TestCase
 {
     public function testTransliterationFailureWithErrorString(): void

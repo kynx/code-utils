@@ -6,18 +6,16 @@ namespace KynxTest\Code\Normalizer\UniqueStrategy;
 
 use Kynx\Code\Normalizer\UniqueStrategy\SpellOutOrdinalPrefix;
 use Kynx\Code\Normalizer\WordCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @uses \Kynx\Code\Normalizer\WordCase
- *
- * @covers \Kynx\Code\Normalizer\UniqueStrategy\SpellOutOrdinalPrefix
- */
+#[CoversClass(SpellOutOrdinalPrefix::class)]
+#[UsesClass(WordCase::class)]
 final class SpellOutOrdinalPrefixTest extends TestCase
 {
-    /**
-     * @dataProvider labelProvider
-     */
+    #[DataProvider('labelProvider')]
     public function testGenerateUniqueName(WordCase $case, string $label, int $occurrence, string $expected): void
     {
         $strategy = new SpellOutOrdinalPrefix($case);

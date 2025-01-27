@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace KynxTest\Code\Normalizer;
 
+use Kynx\Code\Normalizer\AbstractNormalizer;
+use Kynx\Code\Normalizer\AbstractUniqueLabeler;
 use Kynx\Code\Normalizer\ConstantNameNormalizer;
+use Kynx\Code\Normalizer\PhpLabel;
 use Kynx\Code\Normalizer\UniqueConstantLabeler;
 use Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix;
 use Kynx\Code\Normalizer\WordCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @uses \Kynx\Code\Normalizer\AbstractNormalizer
- * @uses \Kynx\Code\Normalizer\AbstractUniqueLabeler
- * @uses \Kynx\Code\Normalizer\ConstantNameNormalizer
- * @uses \Kynx\Code\Normalizer\UniqueStrategy\NumberSuffix
- * @uses \Kynx\Code\Normalizer\PhpLabel
- * @uses \Kynx\Code\Normalizer\WordCase
- *
- * @covers \Kynx\Code\Normalizer\UniqueConstantLabeler
- */
+#[CoversClass(UniqueConstantLabeler::class)]
+#[UsesClass(AbstractNormalizer::class)]
+#[UsesClass(AbstractUniqueLabeler::class)]
+#[UsesClass(ConstantNameNormalizer::class)]
+#[UsesClass(NumberSuffix::class)]
+#[UsesClass(PhpLabel::class)]
+#[UsesClass(WordCase::class)]
 final class UniqueConstantLabelerTest extends TestCase
 {
     public function testConstructorSetsCaseSensitive(): void
