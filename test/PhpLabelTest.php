@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace KynxTest\Code\Normalizer;
 
 use Kynx\Code\Normalizer\PhpLabel;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Kynx\Code\Normalizer\PhpLabel
- */
+#[CoversClass(PhpLabel::class)]
 final class PhpLabelTest extends TestCase
 {
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[DataProvider('isValidProvider')]
     public function testIsValid(PhpLabel $label, string $string, bool $expected): void
     {
         $actual = $label->isValid($string);

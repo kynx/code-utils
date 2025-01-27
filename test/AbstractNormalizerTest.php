@@ -8,25 +8,24 @@ use AssertionError;
 use Kynx\Code\Normalizer\AbstractNormalizer;
 use Kynx\Code\Normalizer\NormalizerException;
 use Kynx\Code\Normalizer\NormalizerInterface;
+use Kynx\Code\Normalizer\PhpLabel;
 use Kynx\Code\Normalizer\WordCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 use function version_compare;
 
 use const PHP_VERSION;
 
-/**
- * @uses \Kynx\Code\Normalizer\NormalizerException
- * @uses \Kynx\Code\Normalizer\PhpLabel
- * @uses \Kynx\Code\Normalizer\WordCase
- *
- * @covers \Kynx\Code\Normalizer\AbstractNormalizer
- */
+#[CoversClass(AbstractNormalizer::class)]
+#[UsesClass(NormalizerException::class)]
+#[UsesClass(PhpLabel::class)]
+#[UsesClass(WordCase::class)]
 final class AbstractNormalizerTest extends TestCase
 {
-    /**
-     * @dataProvider labelProvider
-     */
+    #[DataProvider('labelProvider')]
     public function testNormalize(string $label, string $expected): void
     {
         $actual = $this->getNormalizer()->normalize($label);
@@ -59,9 +58,7 @@ final class AbstractNormalizerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider caseProvider
-     */
+    #[DataProvider('caseProvider')]
     public function testNormalizeUsesCase(WordCase $case, string $expected): void
     {
         $actual = $this->getNormalizer($case)->normalize('foo bar');
@@ -81,9 +78,7 @@ final class AbstractNormalizerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider spellOutCaseProvider
-     */
+    #[DataProvider('spellOutCaseProvider')]
     public function testSpellOutCase(WordCase $case, string $label, string $expected): void
     {
         $actual = $this->getNormalizer($case)->normalize($label);
@@ -151,9 +146,7 @@ final class AbstractNormalizerTest extends TestCase
         $normalizer->normalize('class');
     }
 
-    /**
-     * @dataProvider invalidSuffixProvider
-     */
+    #[DataProvider('invalidSuffixProvider')]
     public function testPrepareSuffixInvalidThrowsException(string $suffix): void
     {
         self::expectException(NormalizerException::class);
