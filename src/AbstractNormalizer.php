@@ -240,7 +240,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
 
     protected function separatorsToSpace(string $string): string
     {
-        return preg_replace('/[' . $this->separators . '\s_]+/', ' ', trim($string));
+        return (string) preg_replace('/[' . $this->separators . '\s_]+/', ' ', trim($string));
     }
 
     protected function spellOutAscii(string $string): string
