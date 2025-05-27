@@ -9,7 +9,7 @@ namespace Kynx\Code\Normalizer;
  */
 final class ClassConstantNameNormalizer extends AbstractNormalizer
 {
-    protected const RESERVED = [
+    protected const array RESERVED = [
         'class',
     ];
 

@@ -40,7 +40,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
      *
      * @var list<string>
      */
-    protected const RESERVED = [
+    protected const array RESERVED = [
         'abstract',
         'and',
         'array',
@@ -122,7 +122,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
         'yield',
     ];
 
-    private const ASCII_SPELLOUT = [
+    private const array ASCII_SPELLOUT = [
         1   => 'Start Of Header',
         2   => 'Start Of Text',
         3   => 'End Of Text',
@@ -187,7 +187,7 @@ abstract class AbstractNormalizer implements NormalizerInterface
         127 => 'Delete',
     ];
 
-    private const DIGIT_SPELLOUT = [
+    private const array DIGIT_SPELLOUT = [
         48 => 'Zero',
         49 => 'One',
         50 => 'Two',
