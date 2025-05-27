@@ -6,12 +6,12 @@ namespace Kynx\Code\Normalizer;
 
 interface NormalizerInterface
 {
-    public const CAMEL_CASE  = 'camelCase';
-    public const PASCAL_CASE = 'PascalCase';
-    public const SNAKE_CASE  = 'snake_case';
-    public const UPPER_SNAKE = 'SNAKE_CASE';
+    public const string CAMEL_CASE  = 'camelCase';
+    public const string PASCAL_CASE = 'PascalCase';
+    public const string SNAKE_CASE  = 'snake_case';
+    public const string UPPER_SNAKE = 'SNAKE_CASE';
 
-    public const DEFAULT_SEPARATORS = '-.';
+    public const string DEFAULT_SEPARATORS = '-.';
 
     public function normalize(string $label): string;
 }
