@@ -142,7 +142,7 @@ final class AbstractNormalizerTest extends TestCase
         }
 
         self::expectException(AssertionError::class);
-        self::expectExceptionMessage('assert($this->suffix !== null)');
+        self::expectExceptionMessageIsOrContains('assert($this->suffix !== null)');
         $normalizer->normalize('class');
     }
 
@@ -150,7 +150,7 @@ final class AbstractNormalizerTest extends TestCase
     public function testPrepareSuffixInvalidThrowsException(string $suffix): void
     {
         self::expectException(NormalizerException::class);
-        self::expectExceptionMessage("Invalid reserved word suffix");
+        self::expectExceptionMessageIsOrContains("Invalid reserved word suffix");
         $this->getNormalizer(
             WordCase::Camel,
             NormalizerInterface::DEFAULT_SEPARATORS,
@@ -180,7 +180,7 @@ final class AbstractNormalizerTest extends TestCase
         $expected = "Cannot transliterate '$invalid': "
             . "String conversion of string to UTF-16 failed: U_INVALID_CHAR_FOUND";
         self::expectException(NormalizerException::class);
-        self::expectExceptionMessage($expected);
+        self::expectExceptionMessageIsOrContains($expected);
         $this->getNormalizer()->normalize($invalid);
     }
 
